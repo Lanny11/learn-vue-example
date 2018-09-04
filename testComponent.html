@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title><!-- 开发环境版本，包含了有帮助的命令行警告 -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+<div id="app">
+    <div id="example-1">
+        <button-counter></button-counter>
+        <button-counter></button-counter>
+        <button-counter></button-counter>
+    </div>
+    <div id="example-2">
+        <blog-post title="My journey with vue"></blog-post>
+        <blog-post title="Blogging with vue"></blog-post>
+        <blog-post title="Why vue is so fun"></blog-post>
+    </div>
+    <div id="example-3">
+        <blog-posts v-for="post in posts" v-bind:post="post"></blog-posts>
+    </div>
+    <div id="example-4">
+        <div :style="{ fontSize: postFontSize + 'em' }">
+            <blog-postt v-for="post in posts" v-bind:key="post.id" v-bind:post="post" v-on:enlarge-text="onEnlargeText(0.1)"></blog-postt>
+        </div>
+    </div>
+    <div id="example-5">
+        <custom-input v-model="searchText"></custom-input>
+        {{ searchText }}
+    </div>
+    <div id="example-6">
+        <alert-box>
+            something bad happened.
+        </alert-box>
+    </div>
+</div>
+
+<script>
+    Vue.component('button-counter', {
+        data: function () {
+            return {
+                count: 0
+            }
+        },
+        template: '<button v-on:click="count++">you clicked me {{ count }} times</button>'
+    })
+
+    Vue.component('blog-post', {
+        props: [ 'title'],
+        template: '<h3>{{ title }}</h3>'
+    })
+
+    Vue.component('blog-posts', {
+        props: ['post'],
+        template: '<div class="blog-post"><h3>{{ post.title }}</h3><div v-html="post.content"></div></div>'
+    })
+
+    Vue.component('blog-postt', {
+        props: ['post'],
+        template: ' <div class="blog-postt"> <h3>{{ post.title }}</h3> <button v-on:click="$emit(\'enlarge-text\')"> Enlarge text </button> <div v-html="post.content"></div> </div>'
+    })
+
+    Vue.component('custom-input', {
+        props: ['value'],
+        template: '<input v-bind:value="value" v-on:input="$emit(\'input\', $event.target.value)"> '
+    })
+
+    Vue.component('alert-box', {
+        template:'<div class="demo-alert-box"><strong>Error!</strong><slot></slot></div>'
+    })
+    var app = new Vue({
+        el: '#app',
+        data: {
+            posts: [
+                { id: 1, title: 'my journey with vue', content: 'hello' },
+                { id: 2, title: 'blogging with vue', content: 'hello' },
+                { id: 3, title: 'my vue is so fun', content: 'hello'}
+            ],
+            content: 'hello',
+            postFontSize: 1,
+            searchText: 'vue'
+        },
+        methods: {
+            onEnlargeText: function (enlargeAmount) {
+                this.postFontSize += enlargeAmount
+            }
+        }
+    })
+
+</script>
+</body>
+</html>
