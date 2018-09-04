@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title><!-- 开发环境版本，包含了有帮助的命令行警告 -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+<div id="app">
+    <ul id="example-1">
+        <li v-for="item in items" :key="item.id">
+            {{ item.message }}
+        </li>
+    </ul>
+    <ul id="example-2">
+        <li v-for="(item, index) in items">
+            {{ index }} - {{ item.message }}
+        </li>
+    </ul>
+    <ul id="example-3" class="demo">
+        <li v-for="value in object">
+            {{ value }}
+        </li>
+    </ul>
+    <ul id="example-4" class="demo">
+        <li v-for="(value, key) in object">
+           {{ key }}: {{ value }}
+        </li>
+    </ul>
+    <ul id="example-5" class="demo">
+        <li v-for="(value, key, index) in object">
+          {{ index }}.{{ key }}: {{ value }}
+        </li>
+    </ul>
+    <ul id="example-6">
+        <li v-for="n in evenNumbers">
+            {{ n }}
+        </li>
+    </ul>
+    <ul id="example-7">
+        <li v-for="n in even(numbers)">
+            {{ n }}
+        </li>
+    </ul>
+    <div id="example-8">
+        <span v-for="n in 10">
+            {{ n }}
+        </span>
+    </div>
+</div>
+
+<script>
+    var app = new Vue({
+        el: '#app',
+        data: {
+            items: [
+                { message: 'Foo',id: '0' },
+                { message: 'Bar' , id: '1'}
+            ],
+            object: {
+                firstName: 'John',
+                lastName: 'Doe',
+                age: 30
+            },
+            numbers: [1, 2, 3,4, 5]
+        },
+        computed: {
+            evenNumbers: function () {
+                return this.numbers.filter(function (number) {
+                    return number % 2 === 0
+                })
+            }
+        },
+        methods: {
+            even: function (numbers) {
+                return this.numbers.filter(function (number) {
+                    return number % 2 === 0
+                })
+            }
+        }
+    })
+    //修改组件中data中的object对象中的age属性值为40
+    Vue.set(app.object,'age', 40);
+
+</script>
+</body>
+</html>
