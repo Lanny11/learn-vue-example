@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title><!-- 开发环境版本，包含了有帮助的命令行警告 -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+<div id="app">
+
+</div>
+
+<script>
+    var myMixin = {
+        created: function () {
+            this.hello()
+        },
+        methods: {
+            hello: function () {
+                console.log('hello from mixin')
+            }
+        }
+    }
+
+    var mixin = {
+        data: function () {
+            return {
+                message: 'hello',
+                foo: 'abc'
+            }
+        },
+        created: function () {
+            console.log('混入对象的钩子被调用')
+        }
+    }
+
+    var Component = Vue.extend({
+        mixins: [myMixin]
+    })
+
+    var component = new Component()
+
+    var app = new Vue({
+        el: '#app',
+        mixins: [mixin],
+        data: function () {
+            return {
+                message: 'goodbye',
+                bar: 'def'
+            }
+        },
+        created: function () {
+            console.log('组件钩子被调用')
+            console.log(this.$data)
+        }
+    })
+
+
+</script>
+</body>
+</html>
