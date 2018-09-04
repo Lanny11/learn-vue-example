@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title><!-- 开发环境版本，包含了有帮助的命令行警告 -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <!--
+Velocity 和 jQuery.animate 的工作方式类似，也是用来实现 JavaScript 动画的一个很棒的选择
+-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/velocity/1.2.3/velocity.min.js"></script>
+    <style type="text/css">
+        .fade-enter-active, .fade-leave-active {
+            transition: opacity .5s;
+        }
+        .fade-enter, .fade-leave-to {
+            opacity: 0;
+        }
+
+        .slide-fade-enter-active {
+            transition: all .3s ease;
+        }
+        .slide-fade-leave-active {
+            transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+        }
+        .slide-fade-enter, .slide-fade-leave-to {
+            transform: translateX(10px);
+            opacity: 0;
+        }
+        .bounce-enter-active {
+            animation: bounce-in .5s;
+        }
+        .bounce-leave-active {
+            animation: bounce-in .5s reverse;
+        }
+        .component-fade-enter-active, .component-fade-leave-active {
+            transition: opacity .3s ease;
+        }
+        .component-fade-enter, .component-fade-leave-to
+            /* .component-fade-leave-active for below version 2.1.8 */ {
+            opacity: 0;
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+    <div id="example-1">
+      <div id="demo">
+        <button v-on:click="show = !show">
+            toggle
+        </button>
+        <transition name="fade" :duration="1000">
+            <p v-if="show">hello</p>
+        </transition>
+     </div>
+    </div>
+    <div id="example-2">
+        <button @click="show = !show">
+            toggle render
+        </button>
+        <transition name="slide-fade" :duration="1000">
+            <p v-if="show">hello</p>
+        </transition>
+    </div>
+    <div id="example-3">
+        <button @click="show = !show">toggle show</button>
+        <transition name="bounce" :duration="{enter: 500, leave:800}">
+            <p v-if="show">lorem ipsum dolor sit amet, consectetur adipiscing elit</p></p>
+        </transition>
+    </div>
+    <div id="example-4">
+        <button @click="show = !show">
+           toggle
+        </button>
+        <transiton
+            v-on:before-enter="beforeEnter"
+            v-on:enter="enter"
+            v-on:leave="leave"
+            v-bind:css="false">
+            <p v-if="show">demo</p>
+        </transiton>
+    </div>
+    <div id="example-5">
+        <transition name="component-fade" mode="out-in">
+            <component v-bind:is="view"></component>
+        </transition>
+    </div>
+    <div id="example-6">
+        <div id="list-demo" class="demo">
+            <button v-on:click="add">add</button>
+            <button v-on:click="remove">remove</button>
+            <transiton-group name="list" tag="p">
+                <span v-for="item in items" v-bind:key="item" class="list-item">
+                    {{ item }}
+                </span>
+            </transiton-group>
+        </div>
+    </div>
+</div>
+
+<script>
+    var app = new Vue({
+        el: '#app',
+        data: {
+           show: false,
+            view: 'v-a',
+            items: [1,2,3,4,5,6,7,8,9],
+            nextNum: 10
+        },
+        methods: {
+            beforeEnter: function (el) {
+                el.style.opacity = 0
+                el.style.tranformOrigin = 'left'
+            },
+            enter: function (el, done) {
+                Velocity(el, { opacity: 1, fontSize: '1.4em'}, { duration: 300})
+                Velocity(el, { fontSize: '1em'}, { complete: done })
+            },
+            leave: function (el, done) {
+                Velocity(el, { translateX: '15px', rotateZ: '50deg' }, { duration: 600})
+                Velocity(el, { rotateZ: '100deg' }, { loop: 2})
+                Velocity(el, {
+                    rotateZ: '45deg',
+                    translateY: '30px',
+                    transelateX: '30px',
+                    opacity: 0
+                }, { complete: done })
+            },
+            randomIndex: function () {
+                return Math.floor(Math.random() * this.items.length)
+            },
+            add: function () {
+                this.items.splice(this.randomIndex(), 0, this.nextNum++)
+            },
+            remove: function () {
+                this.items.splice(this.randomIndex(), 1)
+            }
+        },
+        components: {
+            'v-a' : {
+                template: '<div>component A </div>'
+            },
+            'v-b' : {
+                template: '<div>component B</div>'
+            }
+        }
+
+    })
+</script>
+</body>
+</html>
