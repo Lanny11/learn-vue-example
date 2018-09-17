@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title><!-- 开发环境版本，包含了有帮助的命令行警告 -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+<body>
+<div id="app">
+    <div id="example-1">
+        <blog-post title="My journey with vue"></blog-post>
+    </div>
+    <div id="example-2">
+        <blog-postt v-bind:title="post.title"></blog-postt>
+     </div>
+</div>
+
+<script>
+    Vue.component('blog-post', {
+        props: ['title'],
+        template: '<div class="blog-post"><h3>{{ title }}</h3></div>'
+    })
+
+    Vue.component('blog-postt', {
+        props: ['title'],
+        template: '<div class="blog-post"><h3>{{ title }}</h3></div>'
+    })
+
+    var app = new Vue({
+        el: '#app',
+        data: {
+            post: {
+                title: 'hello'
+            }
+        }
+    })
+
+</script>
+</body>
+</html>
