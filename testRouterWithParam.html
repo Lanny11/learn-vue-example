@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>路由组件传参</title><!-- 开发环境版本，包含了有帮助的命令行警告 -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+
+</head>
+<body>
+<div id="app">
+    <h1>hello app!</h1>
+    <p>
+        <router-link  to="/user/foo">Go to Foo</router-link>
+        <router-link  to="/user/bar">Go to Bar</router-link>
+    </p>
+    <router-view></router-view>
+    </p>
+</div>
+
+<script>
+    const User = {
+        props: ['id'],
+        template: '<div>{{ id }}</div>'
+    }
+
+    const Sidebar  = {
+        template: '<div>slidebar</div>'
+    }
+
+    const router = new VueRouter({
+        routes: [
+            {   path: '/user/:id',
+                component: User,
+                props: true
+            },
+            {
+                path: '/user/:id',
+                component: { default: User, sidebar: Sidebar },
+                props: { default: true, sidebar: false}
+            }
+        ]
+    })
+    const app = new Vue({
+        el: '#app',
+     router: router
+    })
+</script>
+</body>
+</html>
