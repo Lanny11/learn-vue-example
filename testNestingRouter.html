@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>嵌套路由</title><!-- 开发环境版本，包含了有帮助的命令行警告 -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/vue-router/dist/vue-router.js"></script>
+
+</head>
+<body>
+<div id="app">
+    <h1>hello app!</h1>
+    <p>
+        <router-link  to="/user/foo">Go to Foo</router-link>
+        <router-link  to="/user/bar">Go to Bar</router-link>
+        <router-link  to="/user/foo/posts">Go to Foo UserPosts</router-link>
+        <router-link  to="/user/bar/profile">Go to Bar profile</router-link>
+    </p>
+    <router-view></router-view>
+    </p>
+</div>
+
+<script>
+    const User = {
+        template: '' +
+            '<div class="user">' +
+               '<h2>User {{ $route.params.id }}</h2>' +
+               '<router-view></router-view>' +
+            '</div>'
+    }
+
+    const UserProfile = { template: '<div>UserProfile</div>'}
+
+    const UserPosts = { template: '<div>UserPosts</div>'}
+
+    const router = new VueRouter({
+        routes: [
+            {   path: '/user/:id',
+                component: User,
+                children: [
+                    {
+                        path: 'profile',
+                        component: UserProfile
+                    },
+                    {
+                        path: 'posts',
+                        component: UserPosts
+                    }
+                ]
+            }
+        ]
+    })
+    const app = new Vue({
+        el: '#app',
+     router: router
+    })
+</script>
+</body>
+</html>
